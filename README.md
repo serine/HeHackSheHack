@@ -4,7 +4,7 @@
 
 ## Our whiteborad plan
 
-![whitetboardplan](supplementary/whiteBoradPlan.png)
+![whitetboardplan](supplementary/whiteBoardPlan.png)
 
 ## Git how to
 

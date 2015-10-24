@@ -12,12 +12,12 @@ def parse(fname, db):
             startpos = fields[2]
             coverage = fields[3]
 
-            uid = os.path.splitext(os.path.splitext(fname)[0])[0]
+            uid = (fname.split('/')[-1]).split('.')[0]
 
-            content = {'uid':uid, 'chr':chromosome, 'genename':genename, 'coverage': coverage}
+            content = {'uid':uid, 'startpos':startpos, 'chr':chromosome, 'genename':genename, 'coverage': coverage}
 
-            print content
-            #db.insert(content)
+            #print content
+            db.insert(content)
 
 if __name__ == "__main__":
     input_file = sys.argv[1]

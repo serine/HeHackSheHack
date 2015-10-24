@@ -79,3 +79,7 @@ and/or other condition type
 - if a block is more ered than in that gene (block) there are more mutations in that gene/block
 - mutations burden - similar just a nubmer of mutation in that regions but also weighted 
 - base quality per experiment and is the least of our interest right now
+
+## Sticky notes notes
+
+![stickynotes](supplementary/stickyNotes.jpg)

@@ -26,4 +26,3 @@ if __name__ == "__main__":
     db_test = connection.healthhack.testcoverage
 
     parse(input_file, db_test)
-

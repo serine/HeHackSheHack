@@ -9,11 +9,6 @@ library('BSgenome.Hsapiens.UCSC.hg19')
 
 shinyServer(function(input, output) {
   
-#   output$pos_inputs <- renderUI({
-#     selectizeInput("pos_ins", options = possible_inputs(input$chr_sel, input$samp_sel), 
-#                    label = "Select a sample", choices = possible_inputs(input$chr_sel, input$samp_sel)[[1]])
-#   })
-  
   get_sample<- reactive({
     handle_mong0(input$chr_sel, input$s_pos,input$samp_sel)
   })
@@ -32,11 +27,16 @@ shinyServer(function(input, output) {
   })
   
   make_plot <- reactive({
-    make_gplot (gene_seq (), get_sample())
+    make_gplot (gene_seq (), get_sample(), input$xslide)
   })
   
   output$gggplot <- renderPlot({
     make_plot()
+    
+#     output$pos_inputs <- renderUI({
+#       selectInput("pos_ins",selectize = F,
+#                      label = "Select a sample", choices = possible_inputs(input$chr_sel, input$samp_sel)[1:20])
+#     })
   })
   
 })

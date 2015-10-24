@@ -34,14 +34,16 @@ def parseLines(fileObj, uid):
     
     for line in fileObj:
         bits = re.split("\t", line)
-        coverage = re.split(",", bits[3])
+        coverage = re.split(",", re.sub("\n","",bits[3]))
         startPos = int(bits[2])
-        seqLen = len(coverage)
-        seqIdx = range(startPos,startPos + seqLen)
+        endPos = int(startPos) + len(coverage) 
+        # seqLen = len(coverage)
+        # seqIdx = range(startPos,startPos + seqLen)
         
-        for iS in range(0, seqLen-1):
-            print uid, "\t", bits[0], "\t", bits[1], "\t", seqIdx[iS], "\t", coverage[iS]
-            
+        
+    
+        print "{UID: ", uid, ",\nChr: ", bits[0], ",\ngene_name: ", bits[1], ",\nstartPos: ", startPos, ",\nendPos: ", endPos, ",\ncoverage: ", coverage, "}"
+        
             
 
 # files are stored in gz format, so unzip and get unique id 

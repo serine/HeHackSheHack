@@ -33,7 +33,6 @@ def main():
 				row = lines[x]
 				split_row = row.split('\t')
 				base_list.append(split_row[0])
-                                #qc_list.append(int(split_row[1]))
                                 qc_list.append(float(split_row[1]))
 
 	   		a_dict['_id'] = uid

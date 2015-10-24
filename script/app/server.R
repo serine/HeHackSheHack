@@ -25,6 +25,16 @@ shinyServer(function(input, output) {
   })
   
   output$gplot <- renderPlot({
-    ggplot(df(), aes(x = base, y = qual)) + geom_point()
+    p <- ggplot(df(), aes(x = base, y = qual)) + geom_point() 
+    
+    if(is.null(input$plot_brush$ymin) == FALSE) {
+     p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 
+       ylim(input$plot_brush$ymin, input$plot_brush$ymax)
+    }
+    p
+  })
+  
+  output$info <- renderText({
+    paste0("x=", input$plot_click$x, "\ny=", input$plot_click$y)
   })
 })

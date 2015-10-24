@@ -6,7 +6,8 @@ shinyUI(fluidPage(
       uiOutput("patient_ui")
       ),
     mainPanel(
-      plotOutput("gplot")
+      plotOutput("gplot", click = "plot_click", brush = "plot_brush"),
+      verbatimTextOutput("info")
       )
     )
 ))

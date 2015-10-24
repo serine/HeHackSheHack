@@ -50,7 +50,7 @@ and access it as such `http://146.118.98.44/home/$USER/yourFile.html`
 
 ## General notes on the projects
 
-- Have individual track per patient to be an individual track
+- have individual track per patient
 - show individual patient, but be able to take a subset of patients, for example ethnicity condition
 and/or other condition type
 - make toggle box to see just a caucasian or asians

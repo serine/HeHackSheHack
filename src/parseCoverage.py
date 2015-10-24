@@ -41,7 +41,6 @@ def parselines_insert(db, fileObj, uid):
         # seqLen = len(coverage)
         # seqIdx = range(startPos,startPos + seqLen)
         
-        
         content = {"UID": uid, "chr": bits[0], "genename": bits[1], "startpos": startPos, "endpos": endPos, "coverage": coverage}
        
         #print content # print it

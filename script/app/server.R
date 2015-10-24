@@ -1,19 +1,45 @@
 library(ggplot2)
-imp.data <- read.table("test_qc.txt", header = TRUE, sep = "",
-                       stringsAsFactors = FALSE)
+library(rmongodb)
+
 
 shinyServer(function(input, output) {
   
+  #Fetch data from data base
+#   get.data <- reactive({
+#     data.imp <- mongo.find.all(mongo, "healthhack.test_qc")
+#     return(data.imp)
+#   })
+  
+  mongo <- reactive({
+    mongo <- mongo.create(host = "127.0.0.1")
+    return(mongo)
+  })
+  
+  alldata <- reactive({
+#     mongo <- mongo.create(host = "127.0.0.1")
+    data <- mongo.find.all(mongo(), "healthhack.test_qc")
+    df <- data.frame(matrix(
+      unlist(sapply(data, "[", 2)), ncol = length(data))
+    )
+    return(df)
+  })
+  
+  pat_id <- reactive({
+    uid <- mongo.distinct(mongo(), "healthhack.test_qc" , "uid")
+    uid <- as.character(uid)
+    return(uid)
+  })
+
   #Patient ID UI element
   output$patient_ui <- renderUI({
     selectizeInput("patient_id", label = "Patient ID", 
-                   choices =colnames(imp.data),
+                   choices =pat_id(),
                    selected = NULL, multiple = FALSE, options = list(maxOptions = 5))
   })
   
   #Processing dataframe
   
-  df <- reactive({
+  patient.df <- reactive({
     base <- imp.data$base
     
     for(i in 1:length(base)){
@@ -25,7 +51,9 @@ shinyServer(function(input, output) {
   })
   
   output$gplot <- renderPlot({
-    p <- ggplot(df(), aes(x = base, y = qual)) + geom_point() 
+    p <- ggplot(df(), aes(x = base, y = qual)) + geom_point() +
+      geom_point(data = patient.df, aes(x = ___, y = ____), colour = "red")
+    
     
     if(is.null(input$plot_brush$ymin) == FALSE) {
      p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 

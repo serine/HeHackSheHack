@@ -9,8 +9,8 @@ def parse(fname, db):
             fields = re.findall(r'[^	\s]+', line)
             chromosome = fields[0]
             genename = fields[1]
-            startpos = fields[2]
-            coverage = fields[3]
+            startpos = int(fields[2])
+            coverage = [int(i) for i in fields[3].split(',')]
 
             uid = (fname.split('/')[-1]).split('.')[0]
 

@@ -24,7 +24,7 @@ shinyServer(function(input, output) {
   #Render patient ID UI element
   output$patient_ui <- renderUI({
     selectizeInput("patient_id", label = "Patient ID", 
-                   choices = as.list(pat_id()),
+                   choices = as.list(all_pat_id()),
                    selected = NULL, multiple = FALSE, options = list(maxOptions = 5))
   })
   
@@ -59,7 +59,7 @@ shinyServer(function(input, output) {
 
   data.info <- reactive({
     df <- data.frame(
-      base <- base()
+      base <- base(),
       rmean <- apply(alldata(), 1, mean),
       rsd <- apply(alldata(), 1, sd),
       )
@@ -68,10 +68,10 @@ shinyServer(function(input, output) {
  
   
   output$gplot <- renderPlot({
-    p <- ggplot((), aes(x = base)) +  geom_ribbon(aes(ymin=rmean - rsd, 
+    p <- ggplot(alldata(), aes(x = base)) +  geom_ribbon(aes(ymin=rmean - rsd, 
                                                       ymax= rmean + rsd)) + 
       geom_line(aes(y=rmean))
-    p
+    p + geom_line(data = pat_dat, aes(y=input$patient_id), colour = "red")
     
 #     if(is.null(input$plot_brush$ymin) == FALSE) {
 #      p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 

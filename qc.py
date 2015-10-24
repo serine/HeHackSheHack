@@ -33,7 +33,8 @@ def main():
 				row = lines[x]
 				split_row = row.split('\t')
 				base_list.append(split_row[0])
-				qc_list.append(split_row[1])
+                                #qc_list.append(int(split_row[1]))
+                                qc_list.append(float(split_row[1]))
 
 	   		a_dict['_id'] = uid
 			a_dict['quality'] = qc_list
@@ -44,16 +45,11 @@ def main():
 def insertrecord(db, r):
 	db.insert(r)
 
-
 def connecttomongo():
     #connection = MongoClient("mongodb://localhost:27017")
     connection = MongoClient("mongodb://146.118.98.44:27017")
     db_test = connection.healthhack.test_qc
     return db_test
-
 				
 if __name__ == '__main__':
 	main()
-
-			
-

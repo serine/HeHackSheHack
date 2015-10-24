@@ -26,7 +26,6 @@ def main():
             uid = os.path.splitext(os.path.splitext(iF)[0])[0]
             parselines_insert(db, fObj, uid)
     
-
 # function to parse coverage text file
 # takes in the file object and prints the each coverage value to screen
 # in the following format:
@@ -35,7 +34,8 @@ def parselines_insert(db, fileObj, uid):
     
     for line in fileObj:
         bits = re.split("\t", line)
-        coverage = re.split(",", re.sub("\n","",bits[3]))
+        #coverage = re.split(",", re.sub("\n","",bits[3]))
+        coverage = [int(i) for i in re.sub("\n", "", bits[3]).split(",")]
         startPos = int(bits[2])
         endPos = int(startPos) + len(coverage) 
         # seqLen = len(coverage)
@@ -59,7 +59,8 @@ def insertrecord(db, r):
     db.insert(r)
     
 def connecttomongo():
-    connection = MongoClient("mongodb://localhost:27017")
+    #connection = MongoClient("mongodb://localhost:27017")
+    connection = MongoClient("mongodb://146.118.98.44:27017")
     db_test = connection.healthhack.testcoverage
     return db_test
 

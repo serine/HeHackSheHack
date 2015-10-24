@@ -1,8 +1,12 @@
 shinyUI(fluidPage(
-  titlePanel("title"),
+  titlePanel("Quality Control Comparison"),
   
   sidebarLayout(
-    sidebarPanel("panel"),
-    mainPanel("main")
+    sidebarPanel(
+      uiOutput("patient_ui")
+      ),
+    mainPanel(
+      plotOutput("gplot")
+      )
     )
 ))

@@ -1,16 +1,16 @@
-handle_mong0 <- function(chr, pos,samp){  
-  mongo <- mongo.create(host = "146.118.98.44")
+handle_mong0 <- function(chr, pos,samp, mongo){  
+  
   mongo.get.databases(mongo)
   db <-  "healthhack"
+  mongo.get.database.collections(mongo, db)
+
 #   pops1 <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
 #                             list('uid' = samp, 'chr' = chr, 'startpos' = list('$gte' = pos),
 #                                  'startpos' = list('$lte' = pos+150)))
   pops1 <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
                             list('uid' = samp, 'chr' = chr, 'startpos'= pos),
                           fields=
-                            list('coverage' = '1L', '_id'= '0l'))
-
-                                 
+                            list('coverage' = '1L', '_id'= '0l'))                                 
   return(pops1)
   
 }
@@ -40,24 +40,42 @@ make_gplot <- function (seq, samp, slider){
 }
 
 possible_inputs <- function(samp, chr){
-  mongo <- mongo.create(host = "146.118.98.44")
-  mongo.get.databases(mongo)
-  db <-  "healthhack"
   
   all_pos <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
                             list('uid' = samp, 'chr' = chr), fields=
                               list('startpos' = '1L', '_id'= '0l')) 
-  new_pos < unlist(all_pos , recursive = F)
-
-  snewps <-  snewps[sapply(snewps, is.numeric)]
+  new_pos <- unlist(all_pos , recursive = F)
+  print(str(new_pos))
+  snewps <-  new_pos[sapply(new_pos, is.numeric)]
   return (as.numeric(snewps))
 #   print(str(all_pos))
 #   return(as.numeric(unlist(all_pos)))
 
 }
 
+# get_mean_data <- function(samp,chr){
+#   all_pos <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
+#                               list('uid' = samp, 'chr' = chr), fields=
+#                               list('coverage' = '1L', '_id'= '0l')) 
+# }
+
 all_pos <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
-                            list('uid' = "sdat0", 'chr' = "chr1"), fields=
+                            list('uid' = "sdat62", 'chr' = "chr1"), fields=
                             list('startpos' = '1L', '_id'= '0l')) 
+
+means_data <- function(chr, pos, mongo){  
+  
+  mongo.get.databases(mongo)
+  db <-  "healthhack"
+  mongo.get.database.collections(mongo, db)
+  pops2 <- mongo.find.all(mongo, "healthhack.testcoverage", query = 
+                            list('chr' = "chr1", 'startpos'= list('$gte' = 161480623),
+                                 'startpos'= list('$lte' = 161480623+10000)),
+                          fields=
+                            list('coverage' = '1L', '_id'= '0l')) 
+  print(str(pops2))
+  return(pops2)
+  
+}
 
 #"/run/user/1000/gvfs/sftp:host=146.118.98.44,user=andrew/mnt/home/andrew/ShinyApps/app"

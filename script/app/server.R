@@ -94,8 +94,8 @@ shinyServer(function(input, output) {
   
   
   output$gplot <- renderPlot({
-    p <- ggplot(data.info(), aes(x = base)) +  geom_ribbon(aes(ymin= QC - rsd, 
-                                                               ymax= QC + rsd),
+    p <- ggplot(data.info(), aes(x = base)) +  geom_ribbon(aes(ymin= QC - (2 * rsd), 
+                                                               ymax= QC + (2 * rsd)),
                                                            fill ="#EFEFEF") 
     
     p <- p + geom_line(data = pat_data(), aes(x= base, y= QC), size = 1.5,

@@ -18,7 +18,28 @@
     <![endif]-->
   </head>
   <body>
-    <div class = "hack_title"><h1>IQ Genome Browser</h1></div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class = "hack_p_title"><h3>IQ Genome Browser</h3>
+          <!-- <a class="navbar-brand" href="#">IQ Genome Browser</a> -->
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+   <!-- <div class = "hack_title"><h1>IQ Genome Browser</h1></div> -->
       <p class = "text-center"><img src="images/logo.png"/></p>
       <div class = "hack_title"><h2>Defining the problem</h2></div>
         <h3>An Integrated Quality control system - Melbourne Genomics Health Australia</h3>
@@ -53,6 +74,44 @@
     </p>
     
       <div class = "hack_title"><h2>Plan of action</h2></div>
+      <H3>What is the problem?</H3>
+<ul>
+  <li>Genome is large</li>
+  <li>Genome is complex</li>
+</ul>
+
+<h3>Needed a database</h3>
+<ul>
+  <li>Chose MongoDB</li>
+    <ul>
+      <li>Scalable</li>
+      <li>Free</li>
+    </ul>
+</ul>
+
+<h3>Needed to parse data from 3 file types to the Database</h3>
+<ul>
+  <li>FastQC output</li>
+    <ul><li>Quality control tests for the sequencing reads</li></ul>
+  <li>Coverage</li>
+    <ul><li>Number of times each base was read by sequencing</li></ul>
+  <li>Varience</li>
+    <ul><li>Number of base difference from wild type</li></ul>
+</ul>
+
+<h3>Needed to query the database for desired data</h3>
+<ul>
+  <li>what data was needed</li>
+    <ul>
+      <li>Quality scores from FastQC</li>
+      <li>Coverage counts</li>
+      <li>List of variations of each genes from wild type</li>
+  
+    </ul>
+</ul>
+
+<h3>Needed to visualize data</h3>
+  <ul><li>Chose Shiny to create a web app in R</li></ul>
       <div class = "hack_title"><h2>How did it work?</h2></div>
           <h3>example</h3>
 

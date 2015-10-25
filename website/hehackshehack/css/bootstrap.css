@@ -1259,9 +1259,10 @@ h3 .small,
 }
 .hack_p_title {
   background-color: transparent;
+  text-align: center;
 
 }
-.hack_p_title h3 {
+.hack_p_title h2 {
   color: #0A3645;
 }
 h4,

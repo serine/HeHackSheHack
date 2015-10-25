@@ -1,36 +1,37 @@
+library(shiny)
 library(ggplot2)
 library(rmongodb)
 
 
 shinyServer(function(input, output) {
-  
-  #Fetch data from data base
-#   get.data <- reactive({
-#     data.imp <- mongo.find.all(mongo, "healthhack.test_qc")
-#     return(data.imp)
-#   })
-  #Fetch data from database
+  #Define mongo
   mongo <- reactive({
-    mongo <- mongo.create(host = "127.0.0.1")
+    mongo <- mongo.create(host = "146.118.98.44")
     return(mongo)
   })
-  #Fetch patient IDs
+  
+  #Fetch patient IDs with a mongo query. This will then be passed to the 
+  #selectize input which will be rendered in server instead of the UI.
   all_pat_id <- reactive({
-    uid <- mongo.distinct(mongo(), "healthhack.test_qc" , "uid")
+    uid <- mongo.distinct(mongo(), "healthhack.qc" , "uid")
     return(uid)
   })
   
-  
-  #Render patient ID UI element
+  #Render patient ID UI element. This input will be used later to change which
+  #patient record is being displayed. It will pull the specific record out of the 
+  #reactive object which will contain all other records.
   output$patient_ui <- renderUI({
     selectizeInput("patient_id", label = "Patient ID", 
                    choices = as.list(all_pat_id()),
-                   selected = NULL, multiple = FALSE, options = list(maxOptions = 5))
+                   selected = as.list(all_pat_id())[1], 
+                   multiple = FALSE, options = list(maxOptions = 5))
   })
   
-  #Create the range from the base field
+  #Fetch the bases with a mongo query. This should be the same/similar for each record 
+  #(some records has a final entry of 100 and others have 100-101). The base field
+  #will form the xaxis. 
   base <- reactive({
-    base<- mongo.distinct(mongo(), "healthhack.test_qc" , "base")
+    base<- mongo.distinct(mongo(), "healthhack.qc" , "base")
     base <- as.vector(base)
     for(i in 1:length(base)){
       base[i] <- unlist(strsplit(base[i], split = "-"))[[1]]
@@ -41,10 +42,13 @@ shinyServer(function(input, output) {
     return(base)
   })
   
-  #Wrangle the QC data into a format that can be manipulated
+  #Wrangle the QC data into a format that can be manipulated. Pull all entries from the
+  #database. This will be in an array class. This will be converted into a dataframe
+  #with each column corresponding to a patient (use the all_pat_id object), and
+  #the rows correspond to the base.
+  
   alldata <- reactive({
-#     mongo <- mongo.create(host = "127.0.0.1")
-    data <- mongo.find.all(mongo(), "healthhack.test_qc")
+    data <- mongo.find.all(mongo(), "healthhack.qc")
     df <- data.frame(matrix(
       unlist(sapply(data, "[", 2)), ncol = length(data))
     )
@@ -52,52 +56,63 @@ shinyServer(function(input, output) {
     return(df)
   })
   
-  #Pull the record of interest
-  pat_data <- reactive({
-    df <- subset(alldata(), select = input$patient_id, drop = FALSE)
-  })
-
+  #Generate a df containing the summary statistics from the QC information dataframe.
+  #This is what will be plotted as a geom_ribbon layer. The base column provides the 
+  #information for the x-axis. The mean and standard deviationn is 
+  #calculated across each row.
   data.info <- reactive({
+    base <- base()
+    data <- alldata()
+    QC <- apply(data, 1, mean)
+    rsd <- apply(data, 1, sd)
     df <- data.frame(
-      base <- base(),
-      rmean <- apply(alldata(), 1, mean),
-      rsd <- apply(alldata(), 1, sd),
-      )
+      base,
+      QC,
+      rsd
+    )
+    return(df)
   })
   
- 
+  #Pull the record of interest and create a dataframe. Base column - for the xaxis, 
+  #Y-axis will be the QC information for the specific. Wait for the app to find
+  #the input ID first (removes error messages from trying to change colnames without
+  #IF statement)
+  pat_data <- reactive({
+    if(is.null(input$patient_id) == FALSE) {
+      base <- base()
+      QC <- subset(alldata(), select = input$patient_id)
+      df <- data.frame(
+        base,
+        QC
+      )
+      names <- c("base", "QC")
+      colnames(df) <- names
+      return(df)
+    }
+  })
+  
+  
   
   output$gplot <- renderPlot({
-    p <- ggplot(alldata(), aes(x = base)) +  geom_ribbon(aes(ymin=rmean - rsd, 
-                                                      ymax= rmean + rsd)) + 
-      geom_line(aes(y=rmean))
-    p + geom_line(data = pat_dat, aes(y=input$patient_id), colour = "red")
+    p <- ggplot(data.info(), aes(x = base)) +  geom_ribbon(aes(ymin= QC - rsd, 
+                                                               ymax= QC + rsd),
+                                                           fill ="#EFEFEF") 
     
-#     if(is.null(input$plot_brush$ymin) == FALSE) {
-#      p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 
-#        ylim(input$plot_brush$ymin, input$plot_brush$ymax)
-#     }
-#     p
+    p <- p + geom_line(data = pat_data(), aes(x= base, y= QC), size = 1.5,
+                       colour = "#5C5C5C") + theme_bw() + ggtitle(input$patient_id)
+    
+    if(is.null(input$plot_brush$ymin) == FALSE) {
+      p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 
+        ylim(input$plot_brush$ymin, input$plot_brush$ymax)
+    }
+    p
   })
+  output$dpdf <- downloadHandler(
+    filename = function(){
+      paste0(input$patient_id, ".pdf")
+    },
+    content = function(file) {
+      ggsave(file)
+    })
   
-  output$info <- renderText({
-    paste0("x=", input$plot_click$x, "\ny=", input$plot_click$y)
-  })
-
 })
-
-
-#defunct code
-
-#Processing dataframe
-#   
-#   patient.df <- reactive({
-#     base <- imp.data$base
-#     
-#     for(i in 1:length(base)){
-#       base[i] <- unlist(strsplit(base[i], split = "-"))[[1]]
-#     }
-#     base <- as.numeric(base)
-#     imp.data$base <- base
-#     return(imp.data)
-#   })

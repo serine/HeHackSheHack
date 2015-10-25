@@ -12,9 +12,10 @@ shinyUI(fluidPage(
      
     ),
     mainPanel(
-      plotOutput("gggplot", brush = "plot_brush"),
-      textOutput("pseq"),
-      textOutput("sample")
+      plotOutput("gggplot", brush = "plot_brush")
+#       textOutput("pseq"),
+#       textOutput("sample"),
+#         textOutput("fm")
       
     )
   )

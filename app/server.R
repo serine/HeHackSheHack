@@ -34,6 +34,10 @@ shinyServer(function(input, output) {
     get_sample()
   })
   
+  output$fm <- renderPrint({
+    str(mean_frame())
+  })
+  
   gene_seq <-  reactive({
     get_genomic_seq(input$chr_sel, as.numeric(input$pos_ins),get_sample())
     
@@ -43,9 +47,25 @@ shinyServer(function(input, output) {
     gene_seq ()
   })
   
+  
+  mean_frame <- reactive({
+    
+    mongo <- mongoo()
+    mongo.get.databases(mongo)
+    db <-  "healthhack"
+    mongo.get.database.collections(mongo, db)
+    
+    pops1 <- mongo.find.all(mongo, "healthhack.subsetcoverage", query = 
+                              list('chr' = input$chr_sel, 'startpos' =as.numeric(input$pos_ins)  ),
+                            fields=
+                              list('coverage' = '1L', '_id'= '0l'))    
+    return(pops1)
+    
+  })
+  
   make_plot <- reactive({
-    make_gplot (gene_seq (), get_sample(), input$xslide
-                )
+    make_gplot (gene_seq (), get_sample(), input$xslide,
+                mean_frame())
     
 #     means_data(input$chr_sel,input$samp_sel
   })
@@ -69,7 +89,7 @@ shinyServer(function(input, output) {
         end <- as.numeric(snewps)
 
       selectInput("pos_ins",selectize = F,
-                     label = "Select a sample", choices = end[1:20])
+                     label = "Select a genomic location", choices = end[1:20])
     })
 
   
@@ -97,18 +117,30 @@ get_genomic_seq <- function(chr, pos, sample){
   return(c_seq)
 }
 
-make_gplot <- function (seq, samp, slider){
+make_gplot <- function (seq, samp, slider, meanss){
+  meanss <- meanss
+  new_pos2 <- unlist(meanss , recursive = F)
+  snewps2 <-  new_pos2[sapply(new_pos2, is.numeric)]
+  df <- data.frame(snewps2)
+  mean_track <- rowMeans(df)
+  sdevs <- apply(df, 1, sd)
+  
   coverage <- samp[[1]]$coverage
   nums <- seq(1, length(coverage))
   sequence <- strsplit(seq, "")
-  to_plot <- data.frame(sequence, coverage, nums, stringsAsFactors = F)
-  colnames(to_plot) <- c("sequence", "coverage", "numbers")
+  to_plot <- data.frame(sequence, coverage, nums,mean_track,sdevs, stringsAsFactors = F)
+  colnames(to_plot) <- c("sequence", "coverage", "numbers", "means", "sdevs")
   to_plot <- to_plot[
     to_plot$numbers >= slider[1] &
       to_plot$numbers <= slider[2],]
   print(head(to_plot))
-  plt <- ggplot(data = to_plot, aes(x = numbers, y = coverage))+geom_line()+
+  plt <- ggplot(data = to_plot, aes(x = numbers, y = coverage, color="Sample Coverage"), size =1.3)+
+    geom_ribbon(aes(numbers, ymin= means - (sdevs * 1),ymax = means + (sdevs * 1), color="mean +- 1 sdev"), alpha = 0.4)+
+    geom_line(size = 1.3)+
     scale_x_discrete(labels=to_plot$sequence)+
+    geom_line(aes(numbers, means, color="Mean Coverage"), size =1.3)+  
+    scale_color_manual(values=c("Sample Coverage"="red", "mean +- 1 sdev"="grey",
+                                "Mean Coverage"=  "green"))
     xlab("Hg19")
   return(print(plt))
   

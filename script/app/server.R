@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
                                                            fill ="#EFEFEF") 
     
     p <- p + geom_line(data = pat_data(), aes(x= base, y= QC), size = 1.5,
-                       colour = "#5C5C5C") + theme_bw() 
+                       colour = "#5C5C5C") + theme_bw() + ggtitle(input$patient_id)
     
     if(is.null(input$plot_brush$ymin) == FALSE) {
       p <- p +  xlim(input$plot_brush$xmin, input$plot_brush$xmax) + 
@@ -107,5 +107,12 @@ shinyServer(function(input, output) {
     }
     p
   })
+  output$dpdf <- downloadHandler(
+    filename = function(){
+      paste0(input$patient_id, ".pdf")
+    },
+    content = function(file) {
+      ggsave(file)
+    })
   
 })

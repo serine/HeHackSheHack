@@ -1237,6 +1237,7 @@ h3,
   color: #0A3645;
   text-align: center;
 }
+
 h1 small,
 .h1 small,
 h2 small,
@@ -1273,6 +1274,7 @@ h6,
   margin-bottom: 10px;
   text-align: center;
 }
+h4 {text-align: left;}
 h4 small,
 .h4 small,
 h5 small,

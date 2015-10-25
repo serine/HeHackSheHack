@@ -18,7 +18,7 @@
     <![endif]-->
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -74,13 +74,13 @@
     </p>
     
       <div class = "hack_title"><h2>Plan of action</h2></div>
-      <H3>What is the problem?</H3>
+      <h4>What is the problem?</h4>
 <ul>
   <li>Genome is large</li>
   <li>Genome is complex</li>
 </ul>
 
-<h3>Needed a database</h3>
+<h4>Needed a database</h4>
 <ul>
   <li>Chose MongoDB</li>
     <ul>
@@ -89,7 +89,7 @@
     </ul>
 </ul>
 
-<h3>Needed to parse data from 3 file types to the Database</h3>
+<h4>Needed to parse data from 3 file types to the Database</h4>
 <ul>
   <li>FastQC output</li>
     <ul><li>Quality control tests for the sequencing reads</li></ul>
@@ -99,7 +99,7 @@
     <ul><li>Number of base difference from wild type</li></ul>
 </ul>
 
-<h3>Needed to query the database for desired data</h3>
+<h4>Needed to query the database for desired data</h4>
 <ul>
   <li>what data was needed</li>
     <ul>
@@ -110,11 +110,15 @@
     </ul>
 </ul>
 
-<h3>Needed to visualize data</h3>
+<h4>Needed to visualize data</h4>
   <ul><li>Chose Shiny to create a web app in R</li></ul>
       <div class = "hack_title"><h2>How did it work?</h2></div>
-          <h3>example</h3>
-
+          <h3 class = "text-center">Plot coverage at genome positions</h3>
+          <p class = "text-center"><img src="images/Selection_043.png"/></p>
+          <p class = "text-center"><a href = "http://146.118.98.44:3838/andrew/app/">http://146.118.98.44:3838/andrew/app/</a></p>
+          <h3 class = "text-center">Quality control comparison</h3>
+          <p class = "text-center"><img src="images/shiny screenshot.png" width = 75%/></p>
+          <p class = "text-center"><a href = "http://146.118.98.44:3838/adele/QC_app/">http://146.118.98.44:3838/adele/QC_app/</a></p>
       <div class = "hack_title"><h2>Future plans/ considerations</h2></div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

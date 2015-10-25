@@ -83,3 +83,10 @@ and/or other condition type
 ## Sticky notes notes
 
 ![stickynotes](supplementary/stickyNotes.jpg)
+
+## Take home message
+
+two type of group
+
+1. pathologiest - don't care just want to see the result
+2. whereas developers they are interested what have you learn and technologies what are the pros and cons

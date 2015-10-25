@@ -47,7 +47,7 @@ def insertrecord(db, r):
 def connecttomongo():
     #connection = MongoClient("mongodb://localhost:27017")
     connection = MongoClient("mongodb://146.118.98.44:27017")
-    db_test = connection.healthhack.test_qc
+    db_test = connection.healthhack.qc
     return db_test
 				
 if __name__ == '__main__':

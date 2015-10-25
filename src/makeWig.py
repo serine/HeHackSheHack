@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-15 -*-
-#!/usr/bin/env python
-# -*- coding: iso-8859-15 -*-
 
 import sys, os, gzip
 
@@ -31,23 +29,38 @@ for text_file in list_of_files:
                file_dict[file_name][chr_id][geneId] = []
            file_dict[file_name][chr_id][geneId].append(data_values)
            #print chr_id, geneId, data_values
-    break
-
+    #break
 
 track = 'track'
 file_type = 'type=wiggle_0'
-name = 'name = %s'
-description = 'description = %s'
+name = 'name=%s'
+description = 'description=%s'
 step = 'variableStep'
 span = 'span=1'
 chname = None
 ch = 'chrom=%s'
 
-first_line = [track, file_type, name]
-chline = [step, "chrom=%s", span]
+track_header = True
+chr_header = True
 
-for k,v in file_dict.items():
-    for a,b in v["chrY"].items():
-        check = [item for sublist in b for item in sublist]
-        for q,c in check:
-            print k, a, q, c
+for file_name, data in file_dict.items():
+    wiggle_file = file_name.split(".")[0]+".wig"
+    with open(wiggle_file, "w") as out_handler:
+        chr_keys = data.keys()
+        for chr in chr_keys:
+            for gene, values in data[chr].items():
+                #print gene, values
+                check = [item for sublist in values for item in sublist]
+                for position, coverage in check:
+                    if chr_header:
+                        if track_header:
+                            out_handler.write(' '.join((track, file_type, name % file_name, description % file_name, "\n")))
+                            #print ' '.join((track, file_type, name % file_name, description % file_name))
+                            track_header = False
+                        out_handler.write(' '.join((step, ch % chr, span, "\n")))
+                        #print ' '.join((step, ch % chr, span))
+                        chr_header = False
+                    out_handler.write(' '.join((str(position), str(coverage), "\n")))
+                    #print ' '.join((str(position), str(coverage)))
+            chr_header = True
+    #break

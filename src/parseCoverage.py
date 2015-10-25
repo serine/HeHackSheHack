@@ -16,8 +16,8 @@ def parse(fname, db):
 
             content = {'uid':uid, 'startpos':startpos, 'chr':chromosome, 'genename':genename, 'coverage': coverage}
 
-            #print content
-            db.insert(content)
+            print content
+            #db.insert(content)
 
 if __name__ == "__main__":
     input_file = sys.argv[1]

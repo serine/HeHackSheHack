@@ -248,6 +248,7 @@ th {
   }
   .navbar {
     display: none;
+    margin-bottom: 2em;
   }
   .btn > .caret,
   .dropup > .btn > .caret {
@@ -1236,6 +1237,7 @@ h3,
   color: #0A3645;
   text-align: center;
 }
+
 h1 small,
 .h1 small,
 h2 small,
@@ -1253,6 +1255,14 @@ h3 .small,
 .hack_title{
   text-align: center;
   background-color: #C7CED1;
+
+}
+.hack_p_title {
+  background-color: transparent;
+
+}
+.hack_p_title h3 {
+  color: #0A3645;
 }
 h4,
 .h4,
@@ -1264,6 +1274,7 @@ h6,
   margin-bottom: 10px;
   text-align: center;
 }
+h4 {text-align: left;}
 h4 small,
 .h4 small,
 h5 small,
@@ -1305,6 +1316,7 @@ h6,
 p {
   margin: 0 0 10px;
 }
+
 .lead {
   margin-bottom: 20px;
   font-size: 16px;
@@ -4340,11 +4352,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   padding: 15px 15px;
   font-size: 18px;
   line-height: 20px;
+  color: #fff;
+
 }
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
 }
+
 .navbar-brand > img {
   display: block;
 }
@@ -4652,8 +4667,8 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   color: #ccc;
 }
 .navbar-inverse {
-  background-color: #222;
-  border-color: #080808;
+  background-color: transparent;
+  border-color: transparent;
 }
 .navbar-inverse .navbar-brand {
   color: #9d9d9d;
@@ -6569,6 +6584,7 @@ button.close {
 .modal-footer:after {
   clear: both;
 }
+
 .center-block {
   display: block;
   margin-right: auto;

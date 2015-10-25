@@ -1253,6 +1253,11 @@ h3 .small,
 .hack_title{
   text-align: center;
   background-color: #C7CED1;
+
+}
+.hack_page_title {
+  color: #fff;
+  background-color: transparent;
 }
 h4,
 .h4,
@@ -1305,6 +1310,7 @@ h6,
 p {
   margin: 0 0 10px;
 }
+
 .lead {
   margin-bottom: 20px;
   font-size: 16px;

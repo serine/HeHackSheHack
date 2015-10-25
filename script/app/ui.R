@@ -1,3 +1,5 @@
+library(shiny)
+
 shinyUI(fluidPage(
   titlePanel("Quality Control Comparison"),
   
@@ -7,7 +9,8 @@ shinyUI(fluidPage(
       ),
     mainPanel(
       plotOutput("gplot", click = "plot_click", brush = "plot_brush"),
-      verbatimTextOutput("info")
+      textOutput("info"),
+      tableOutput("table")
       )
     )
 ))
